@@ -1,27 +1,28 @@
-int redPin = 13;
-int greenPin = 12;
+// Definição do pino do sensor de temperatura
+int sensorPin = A0;  // Pino analógico onde o sensor está conectado
 
 void setup() {
-  pinMode(redPin, OUTPUT);
-  pinMode(greenPin, OUTPUT);
+  // Inicializa a comunicação serial a 9600 bps
+  Serial.begin(9600);
 }
 
 void loop() {
-  // Luz verde acesa (Permissão para seguir)
-  digitalWrite(greenPin, HIGH);
-  digitalWrite(redPin, LOW);
-  delay(10000);  // 10 segundos
-  digitalWrite(greenPin, LOW);
-
-  // Luz amarela acesa (Atenção)
-  digitalWrite(redPin, HIGH);
-  digitalWrite(greenPin, HIGH);  // Verde + Vermelho = Amarelo
-  delay(2000);  // 2 segundos
-  digitalWrite(redPin, LOW);
-  digitalWrite(greenPin, LOW);
-
-  // Luz vermelha acesa (Pare)
-  digitalWrite(redPin, HIGH);
-  delay(10000);  // 10 segundos
-  digitalWrite(redPin, LOW);
+  // Lê o valor do sensor de temperatura
+  int sensorValue = analogRead(sensorPin);
+  
+  // Converte o valor lido para tensão (0 a 5V)
+  float voltage = sensorValue * (5.0 / 1023.0);
+  
+  // Converte a tensão para temperatura em Celsius
+  float temperatureC = (voltage - 0.5) * 100;
+  
+  // Exibe a temperatura no Serial Monitor
+  Serial.print("Temperatura: ");
+  Serial.print(temperatureC);
+  Serial.print(" ");        // Espaço antes do símbolo de grau
+  Serial.print((char)176);  // Símbolo de grau (°)
+  Serial.println("C");
+  
+  // Atraso de 10 segundos antes de fazer a próxima leitura
+  delay(10000);
 }
